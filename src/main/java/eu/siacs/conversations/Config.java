@@ -41,6 +41,7 @@ public final class Config {
 	public static final String MAGIC_CREATE_DOMAIN = "conversations.im";
 	public static final String QUICKSY_DOMAIN = "quicksy.im";
 	public static final boolean HIDE_CONFERENCE_SETTINGS = false; //disallow change of conference settings
+	public static final boolean HIDE_MAM_PREFERENCES = false; //disallow change of mam settings
 	public static final boolean DISALLOW_REGISTRATION_IN_UI = false; //hide the register checkbox
 
 	public static final boolean USE_RANDOM_RESOURCE_ON_EVERY_BIND = false;
