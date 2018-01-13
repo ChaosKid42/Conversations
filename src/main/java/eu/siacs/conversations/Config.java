@@ -48,6 +48,7 @@ public final class Config {
     public static final String CHANNEL_DISCOVERY = "https://search.jabber.network";
 
     public static final boolean HIDE_CONFERENCE_SETTINGS = false; //disallow change of conference settings
+    public static final boolean HIDE_MAM_PREFERENCES = false; //disallow change of mam settings
     public static final boolean DISALLOW_REGISTRATION_IN_UI = false; //hide the register checkbox
 
     public static final boolean USE_RANDOM_RESOURCE_ON_EVERY_BIND = false;
