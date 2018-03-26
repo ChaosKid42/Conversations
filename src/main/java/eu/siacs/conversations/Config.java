@@ -45,6 +45,8 @@ public final class Config {
 
     public static final String CHANNEL_DISCOVERY = "https://search.jabber.network";
 
+    public static final String HOST_LOCK = null; //set host to fixed value
+    public static final int PORT_LOCK = 5222; //also set port (requires HOST_LOCK != null)
     public static final boolean HIDE_CONFERENCE_SETTINGS = false; //disallow change of conference settings
     public static final boolean HIDE_MAM_PREFERENCES = false; //disallow change of mam settings
     public static final boolean DISALLOW_REGISTRATION_IN_UI = false; //hide the register checkbox

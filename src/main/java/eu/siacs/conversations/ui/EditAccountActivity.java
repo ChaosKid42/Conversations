@@ -247,6 +247,11 @@ public class EditAccountActivity extends OmemoActivity implements OnAccountUpdat
                 }
             }
 
+            if (Config.HOST_LOCK != null) {
+                   hostname = Config.HOST_LOCK;
+                   numericPort = Config.PORT_LOCK;
+            }
+
             if (jid.getLocal() == null) {
                 if (mUsernameMode) {
                     binding.accountJidLayout.setError(getString(R.string.invalid_username));
