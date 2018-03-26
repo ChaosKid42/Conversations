@@ -219,7 +219,10 @@ public class EditAccountActivity extends OmemoActivity implements OnAccountUpdat
             }
             final String hostname;
             int numericPort = 5222;
-            if (mShowOptions) {
+            if (Config.HOST_LOCK != null) {
+               hostname = Config.HOST_LOCK;
+               numericPort = Config.PORT_LOCK;
+            } else if (mShowOptions) {
                 hostname = CharMatcher.whitespace().removeFrom(binding.hostname.getText());
                 final String port = CharMatcher.whitespace().removeFrom(binding.port.getText());
                 if (Resolver.invalidHostname(hostname)) {
