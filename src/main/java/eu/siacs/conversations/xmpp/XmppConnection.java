@@ -279,7 +279,7 @@ public class XmppConnection implements Runnable {
             } else {
                 final String domain = account.getJid().getDomain();
                 final List<Resolver.Result> results;
-                final boolean hardcoded = extended && !account.getHostname().isEmpty();
+                final boolean hardcoded = (extended && !account.getHostname().isEmpty()) || (Config.HOST_LOCK != null);
                 if (hardcoded) {
                     results = Resolver.fromHardCoded(account.getHostname(), account.getPort());
                 } else {
