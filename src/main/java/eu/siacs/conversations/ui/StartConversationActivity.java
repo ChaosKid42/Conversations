@@ -868,6 +868,11 @@ public class StartConversationActivity extends XmppActivity implements XmppConne
 				if (invite.account != null) {
 					xmppConnectionService.getShortcutService().report(contact);
 				}
+				if (Config.INVITES_MAY_UPDATE_NAME && invite.getName() != null) {
+					contact.setServerName(invite.getName());
+					xmppConnectionService.pushContactToServer(contact);
+				}
+
 				switchToConversationDoNotAppend(contact, invite.getBody());
 			}
 			return true;
