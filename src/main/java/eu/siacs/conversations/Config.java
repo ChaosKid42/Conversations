@@ -2,6 +2,8 @@ package eu.siacs.conversations;
 
 import android.graphics.Bitmap;
 
+import org.osmdroid.tileprovider.tilesource.XYTileSource;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -188,5 +190,13 @@ public final class Config {
         public final static int LOCATION_FIX_SIGNIFICANT_TIME_DELTA = 1000 * 60 * 2; // ms
         public final static boolean SHOW_ZOOM_CONTROLS = false;
         public final static boolean ANIMATE_MAP = true;
+
+        public final static XYTileSource TILE_SOURCES[] = {
+            new XYTileSource("OpenStreetMap",
+                0, 19, 256, ".png", new String[] {
+                "https://a.tile.openstreetmap.org/",
+                "https://b.tile.openstreetmap.org/",
+                "https://c.tile.openstreetmap.org/" },"© OpenStreetMap contributors")
+        };
     }
 }
