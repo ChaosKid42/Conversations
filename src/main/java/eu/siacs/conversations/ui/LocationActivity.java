@@ -15,7 +15,10 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SubMenu;
+import android.view.View;
 
 import androidx.annotation.BoolRes;
 import androidx.annotation.NonNull;
@@ -25,6 +28,7 @@ import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.config.IConfigurationProvider;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.tileprovider.tilesource.XYTileSource;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.CustomZoomButtonsController;
 import org.osmdroid.views.MapView;
@@ -32,6 +36,7 @@ import org.osmdroid.views.overlay.CopyrightOverlay;
 import org.osmdroid.views.overlay.Overlay;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
 
 import eu.siacs.conversations.BuildConfig;
 import eu.siacs.conversations.Config;
@@ -53,6 +58,14 @@ public abstract class LocationActivity extends ActionBarActivity implements Loca
 
 	protected static final String KEY_LOCATION = "loc";
 	protected static final String KEY_ZOOM_LEVEL = "zoom";
+	protected XYTileSource tileSource = Config.Map.TILE_SOURCES[0];
+	protected final static LinkedHashMap<Integer, XYTileSource> TILE_SOURCES_MAP = new LinkedHashMap<Integer, XYTileSource>() {
+		{
+			for (int i = 0; i < Config.Map.TILE_SOURCES.length; i++) {
+				put(View.generateViewId(), Config.Map.TILE_SOURCES[i]);
+			}
+		}
+	};
 
 	protected Location myLoc = null;
 	private MapView map = null;
@@ -133,7 +146,7 @@ public abstract class LocationActivity extends ActionBarActivity implements Loca
 	protected void setupMapView(MapView mapView, final GeoPoint pos) {
 		map = mapView;
 		map.getOverlays().add(new CopyrightOverlay(this));
-		map.setTileSource(TileSourceFactory.MAPNIK);
+		map.setTileSource(tileSource);
 		if (Config.Map.SHOW_ZOOM_CONTROLS) {
 			map.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.SHOW_AND_FADEOUT);
 		} else {
@@ -153,6 +166,13 @@ public abstract class LocationActivity extends ActionBarActivity implements Loca
 	protected abstract void gotoLoc(final boolean setZoomLevel);
 
 	protected abstract void setMyLoc(final Location location);
+
+	protected void changeTileSource(XYTileSource tileSource) {
+		if (this.tileSource != tileSource) {
+				this.tileSource = tileSource;
+				map.setTileSource(tileSource);
+		}
+	}
 
 	protected void requestLocationUpdates() {
 		if (!hasLocationFeature || locationManager == null) {
@@ -208,8 +228,28 @@ public abstract class LocationActivity extends ActionBarActivity implements Loca
 			case android.R.id.home:
 				finish();
 				return true;
+			default:
+				if (TILE_SOURCES_MAP.get(item.getItemId()) != null) {
+					changeTileSource(TILE_SOURCES_MAP.get(item.getItemId()));
+					return true;
+				}
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(final Menu menu) {
+		if (TILE_SOURCES_MAP.size() > 1) {
+			final SubMenu subMenu = menu.findItem(R.id.action_change_tile_source).getSubMenu();
+			for (LinkedHashMap.Entry<Integer, XYTileSource> entry : TILE_SOURCES_MAP.entrySet()) {
+				subMenu.add(0, entry.getKey(), Menu.NONE, entry.getValue().name());
+			}
+		} else {
+			menu.findItem(R.id.action_change_tile_source).setVisible(false);
+		}
+
+		updateUi();
+		return true;
 	}
 
 	@Override
@@ -238,7 +278,7 @@ public abstract class LocationActivity extends ActionBarActivity implements Loca
 		requestLocationUpdates();
 		updateLocationMarkers();
 		updateUi();
-		map.setTileSource(TileSourceFactory.MAPNIK);
+		map.setTileSource(tileSource);
 		map.setTilesScaledToDpi(true);
 
 		if (mapAtInitialLoc()) {
