@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.text.method.LinkMovementMethod;
+import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
 
@@ -153,6 +154,14 @@ public class ShareLocationActivity extends LocationActivity implements LocationL
 	@Override
 	protected void setMyLoc(final Location location) {
 		this.myLoc = location;
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(final Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.menu_share_location, menu);
+
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
