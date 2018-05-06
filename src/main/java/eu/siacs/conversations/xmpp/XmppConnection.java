@@ -1828,7 +1828,7 @@ public class XmppConnection implements Runnable {
         }
 
         public boolean bookmarksConversion() {
-            return hasDiscoFeature(account.getJid().asBareJid(), Namespace.BOOKMARKS_CONVERSION) && pepPublishOptions();
+            return (Config.PEP_BOOKMARKS || hasDiscoFeature(account.getJid().asBareJid(),Namespace.BOOKMARKS_CONVERSION)) && pepPublishOptions();
         }
 
         public boolean avatarConversion() {
