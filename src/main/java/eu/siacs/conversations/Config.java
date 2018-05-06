@@ -142,6 +142,8 @@ public final class Config {
     public static final boolean MUC_LEAVE_BEFORE_JOIN = true;
 
     public static final boolean USE_LMC_VERSION_1_1 = true;
+    public static final boolean PEP_BOOKMARKS = false; // store and retrieve bookmarks to/from pep instead of private storage
+
     public static final boolean WARN_NON_ANONYMOUS = true; // whether to warn before joining non-anon non-private rooms
 
     public static final long MAM_MAX_CATCHUP = MILLISECONDS_IN_DAY * 5;
