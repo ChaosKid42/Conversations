@@ -305,7 +305,7 @@ public class XmppConnectionService extends Service {
             mJingleConnectionManager.cancelInTransmission();
             mQuickConversationsService.considerSyncBackground(false);
             fetchRosterFromServer(account);
-            if (!account.getXmppConnection().getFeatures().bookmarksConversion()) {
+            if (Config.PEP_BOOKMARKS || !account.getXmppConnection().getFeatures().bookmarksConversion()) {
                 fetchBookmarks(account);
             }
             final boolean flexible = account.getXmppConnection().getFeatures().flexibleOfflineMessageRetrieval();
