@@ -130,6 +130,8 @@ public final class Config {
 
     public static final boolean IGNORE_ID_REWRITE_IN_MUC = true;
 
+    public static final boolean PEP_BOOKMARKS = false; // store and retrieve bookmarks to/from pep instead of private storage
+
     public static final Jid MUC_SERVICES_FOR_DISCO[] = {
         /// Jid.of("conference.mydomain.org")   // List all confernce services you want to query
     };
