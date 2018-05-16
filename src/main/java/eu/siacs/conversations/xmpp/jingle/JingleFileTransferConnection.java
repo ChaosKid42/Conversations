@@ -532,7 +532,7 @@ public class JingleFileTransferConnection extends AbstractJingleConnection imple
 
                 if (id.account.getRoster().getContact(id.with).showInContactList()
                         && jingleConnectionManager.hasStoragePermission()
-                        && size < this.jingleConnectionManager.getAutoAcceptFileSize()
+                        && (Config.AUTO_ACCEPT_ALL_FILES || size < this.jingleConnectionManager.getAutoAcceptFileSize())
                         && xmppConnectionService.isDataSaverDisabled()) {
                     Log.d(Config.LOGTAG, "auto accepting file from " + id.with);
                     this.acceptedAutomatically = true;
