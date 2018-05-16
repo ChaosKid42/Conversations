@@ -487,7 +487,7 @@ public class JingleConnection implements Transferable {
                 //expect the cipher text size. so we just + 16 bytes (auth tag size) here
                 this.file.setExpectedSize(size + (remoteIsUsingJet ? 16 : 0));
                 if (mJingleConnectionManager.hasStoragePermission()
-                        && size < this.mJingleConnectionManager.getAutoAcceptFileSize()
+                        && (Config.AUTO_ACCEPT_ALL_FILES || size < this.mJingleConnectionManager.getAutoAcceptFileSize())
                         && mXmppConnectionService.isDataSaverDisabled()) {
                     Log.d(Config.LOGTAG, "auto accepting file from " + packet.getFrom());
                     this.acceptedAutomatically = true;
