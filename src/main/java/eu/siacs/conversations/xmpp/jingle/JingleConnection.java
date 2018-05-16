@@ -513,7 +513,7 @@ public class JingleConnection implements Transferable {
 
                 if (account.getRoster().getContact(from).showInContactList()
                         && mJingleConnectionManager.hasStoragePermission()
-                        && size < this.mJingleConnectionManager.getAutoAcceptFileSize()
+                        && (Config.AUTO_ACCEPT_ALL_FILES || size < this.mJingleConnectionManager.getAutoAcceptFileSize())
                         && mXmppConnectionService.isDataSaverDisabled()) {
                     Log.d(Config.LOGTAG, "auto accepting file from " + from);
                     this.acceptedAutomatically = true;
