@@ -20,6 +20,15 @@ public class Bookmark extends Element implements ListItem {
 	private Account account;
 	private WeakReference<Conversation> conversation;
 	private Jid jid;
+	private boolean push = true;
+
+	public Bookmark(final Account account, final Jid jid, final boolean push) {
+		super("conference");
+		this.jid = jid;
+		this.setAttribute("jid", jid.toString());
+		this.account = account;
+		this.push = push;
+	}
 
 	public Bookmark(final Account account, final Jid jid) {
 		super("conference");
@@ -186,4 +195,12 @@ public class Bookmark extends Element implements ListItem {
 	public int getAvatarBackgroundColor() {
 		return UIHelper.getColorForName(jid != null ? jid.asBareJid().toString() : getDisplayName());
 	}
+	public boolean push() {
+		return this.push;
+	}
+
+	public void flagPush() {
+		this.push = true;
+	}
+
 }
