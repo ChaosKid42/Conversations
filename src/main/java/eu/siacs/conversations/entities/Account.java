@@ -471,6 +471,16 @@ public class Account extends AbstractEntity implements AvatarService.Avatarable 
         return this.bookmarks;
     }
 
+    public List<Bookmark> getBookmarksToBePushed() {
+        ArrayList<Bookmark> result = new ArrayList<>();
+        for(Bookmark bookmark : bookmarks) {
+            if (bookmark.push()) {
+                result.add(bookmark);
+            }
+        }
+        return result;
+    }
+
     public void setBookmarks(final CopyOnWriteArrayList<Bookmark> bookmarks) {
         this.bookmarks = bookmarks;
     }
