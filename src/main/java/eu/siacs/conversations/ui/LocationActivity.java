@@ -131,7 +131,11 @@ public abstract class LocationActivity extends ActionBarActivity implements Loca
 	protected void setupMapView(MapView mapView, final GeoPoint pos) {
 		map = mapView;
 		map.setTileSource(TileSourceFactory.MAPNIK);
-		map.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.NEVER);
+		if (Config.Map.SHOW_ZOOM_CONTROLS) {
+			map.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.SHOW_AND_FADEOUT);
+		} else {
+			map.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.NEVER);
+		}
 		map.setMultiTouchControls(true);
 		map.setTilesScaledToDpi(false);
 		mapController = map.getController();
