@@ -450,7 +450,8 @@ public class XmppConnectionService extends Service {
             } else if (account.getStatus() == Account.State.REGISTRATION_SUCCESSFUL) {
                 databaseBackend.updateAccount(account);
                 reconnectAccount(account, true, false);
-            } else if (account.getStatus() != Account.State.CONNECTING && account.getStatus() != Account.State.NO_INTERNET) {
+            } else if (account.getStatus() != Account.State.CONNECTING && account.getStatus() != Account.State.NO_INTERNET &&
+                (!Config.DISABLE_RECONNECT_IF_UNAUTHORIZED || account.getStatus() != Account.State.UNAUTHORIZED)) {
                 resetSendingToWaiting(account);
                 if (connection != null && account.getStatus().isAttemptReconnect()) {
                     final int next = connection.getTimeToNextAttempt();
@@ -3885,13 +3886,14 @@ public class XmppConnectionService extends Service {
 
     private void reconnectAccount(final Account account, final boolean force, final boolean interactive) {
         synchronized (account) {
+
             XmppConnection connection = account.getXmppConnection();
             if (connection == null) {
                 connection = createConnection(account);
                 account.setXmppConnection(connection);
             }
             boolean hasInternet = hasInternetConnection();
-            if (account.isEnabled() && hasInternet) {
+            if (account.isEnabled() && hasInternet && (!Config.DISABLE_RECONNECT_IF_UNAUTHORIZED || interactive || account.getStatus() != Account.State.UNAUTHORIZED)) {
                 if (!force) {
                     disconnect(account, false);
                 }
