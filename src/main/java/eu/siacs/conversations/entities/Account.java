@@ -297,7 +297,8 @@ public class Account extends AbstractEntity implements AvatarService.Avatarable 
     public boolean hasErrorStatus() {
         return getXmppConnection() != null
                 && (getStatus().isError() || getStatus() == State.CONNECTING)
-                && getXmppConnection().getAttempt() >= 3;
+                && (getXmppConnection().getAttempt() >= 3 ||
+                    (Config.DISABLE_RECONNECT_IF_UNAUTHORIZED && getStatus() == State.UNAUTHORIZED)) ;
     }
 
     public Presence.Status getPresenceStatus() {
