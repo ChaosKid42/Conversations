@@ -23,9 +23,13 @@ public class SettingsFragment extends PreferenceFragment {
 
 		addPreferencesFromResource(R.xml.preferences);
 
+		PreferenceCategory mCategory = (PreferenceCategory) findPreference("security_options");
+		if (Config.AUTOMATIC_MESSAGE_DELETION > 0) {
+			Preference automaticMessageDeletionList = findPreference("automatic_message_deletion");
+			mCategory.removePreference(automaticMessageDeletionList);
+		}
 		// Remove from standard preferences if the flag ONLY_INTERNAL_STORAGE is false
 		if (!Config.ONLY_INTERNAL_STORAGE) {
-			PreferenceCategory mCategory = (PreferenceCategory) findPreference("security_options");
 			if (mCategory != null) {
 				Preference cleanCache = findPreference("clean_cache");
 				Preference cleanPrivateStorage = findPreference("clean_private_storage");
