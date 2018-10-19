@@ -3877,8 +3877,8 @@ public class XmppConnectionService extends Service {
     }
 
     public long getAutomaticMessageDeletionDate() {
-        final long timeout = getLongPreference(SettingsActivity.AUTOMATIC_MESSAGE_DELETION, R.integer.automatic_message_deletion);
-        return timeout == 0 ? timeout : (System.currentTimeMillis() - (timeout * 1000));
+        final long timeout = Config.AUTOMATIC_MESSAGE_DELETION > 0 ? Config.AUTOMATIC_MESSAGE_DELETION : getLongPreference(SettingsActivity.AUTOMATIC_MESSAGE_DELETION, R.integer.automatic_message_deletion) * 1000;
+        return timeout == 0 ? timeout : (System.currentTimeMillis() - timeout);
     }
 
     public long getLongPreference(String name, @IntegerRes int res) {
