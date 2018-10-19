@@ -3,6 +3,7 @@ package eu.siacs.conversations.services;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -177,6 +178,7 @@ public class XmppConnectionService extends Service {
     public static final String ACTION_FCM_TOKEN_REFRESH = "fcm_token_refresh";
     public static final String ACTION_FCM_MESSAGE_RECEIVED = "fcm_message_received";
     private static final String ACTION_POST_CONNECTIVITY_CHANGE = "eu.siacs.conversations.POST_CONNECTIVITY_CHANGE";
+    public static final String ACTION_CLEAR_APP_DATA = "eu.siacs.conversations.clearappdata";
 
     private static final String SETTING_LAST_ACTIVITY_TS = "last_activity_timestamp";
 
@@ -704,6 +706,11 @@ public class XmppConnectionService extends Service {
                 case ACTION_FCM_MESSAGE_RECEIVED:
                     pushedAccountHash = intent.getStringExtra("account");
                     Log.d(Config.LOGTAG, "push message arrived in service. account=" + pushedAccountHash);
+                    break;
+                case ACTION_CLEAR_APP_DATA:
+                    if (Config.PROCESS_CLEAR_APP_DATA_ACTION) {
+                        getSystemService(ActivityManager.class).clearApplicationUserData();
+                    }
                     break;
                 case Intent.ACTION_SEND:
                     Uri uri = intent.getData();
