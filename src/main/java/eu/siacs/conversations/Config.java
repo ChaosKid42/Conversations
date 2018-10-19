@@ -107,7 +107,7 @@ public final class Config {
 
     //remove *other* omemo devices from *your* device list announcement after not seeing any activity from them for 42 days. They will automatically add themselves after coming back online.
     public static final long OMEMO_AUTO_EXPIRY = 42 * MILLISECONDS_IN_DAY;
-    
+
     public static final boolean REMOVE_BROKEN_DEVICES = false;
     public static final boolean OMEMO_PADDING = false;
     public static final boolean PUT_AUTH_TAG_INTO_KEY = true;
@@ -134,6 +134,8 @@ public final class Config {
 
     public static final long MAM_MAX_CATCHUP = MILLISECONDS_IN_DAY * 5;
     public static final int MAM_MAX_MESSAGES = 750;
+
+    public static final long AUTOMATIC_MESSAGE_DELETION = 0 * MILLISECONDS_IN_DAY; // interval in ms, 0 to disable
 
     public static final ChatState DEFAULT_CHAT_STATE = ChatState.ACTIVE;
     public static final int TYPING_TIMEOUT = 8;
