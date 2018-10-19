@@ -237,7 +237,7 @@ public class SettingsActivity extends XmppActivity implements
 
 			final Preference cleanPrivateStoragePreference = mSettingsFragment.findPreference("clean_private_storage");
 			if (cleanPrivateStoragePreference != null) {
-				cleanPrivateStoragePreference.setOnPreferenceClickListener(preference -> cleanPrivateStorage());
+				cleanPrivateStoragePreference.setOnPreferenceClickListener(preference -> cleanPrivateStorage(this));
 			}
 		}
 
@@ -286,16 +286,16 @@ public class SettingsActivity extends XmppActivity implements
 		return true;
 	}
 
-	private boolean cleanPrivateStorage() {
+	public static boolean cleanPrivateStorage(XmppActivity activity) {
 		for(String type : Arrays.asList("Images", "Videos", "Files", "Recordings")) {
-		        cleanPrivateFiles(type);
+		        cleanPrivateFiles(type, activity);
 	    }
 		return true;
 	}
 
-	private void cleanPrivateFiles(final String type) {
+	private static void cleanPrivateFiles(final String type, XmppActivity activity) {
 		try {
-			File dir = new File(getFilesDir().getAbsolutePath(), "/" + type + "/");
+			File dir = new File(activity.getFilesDir().getAbsolutePath(), "/" + type + "/");
 			File[] array = dir.listFiles();
 			if (array != null) {
 				for (int b = 0; b < array.length; b++) {

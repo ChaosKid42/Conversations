@@ -356,6 +356,9 @@ public class ManageAccountActivity extends XmppActivity implements OnAccountUpda
 				(dialog, which) -> {
 					xmppConnectionService.deleteAccount(account);
 					selectedAccount = null;
+					if (Config.CLEAN_FILES_ON_NO_ACCOUNT && Config.ONLY_INTERNAL_STORAGE && xmppConnectionService.getAccounts().size() == 0) {
+						SettingsActivity.cleanPrivateStorage(this);
+					}
 					if (xmppConnectionService.getAccounts().size() == 0 && Config.MAGIC_CREATE_DOMAIN != null) {
 						WelcomeActivity.launch(this);
 					}
