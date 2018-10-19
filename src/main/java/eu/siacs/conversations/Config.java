@@ -130,6 +130,8 @@ public final class Config {
 	public static final long MAM_MAX_CATCHUP =  MILLISECONDS_IN_DAY * 5;
 	public static final int MAM_MAX_MESSAGES = 750;
 
+	public static final long AUTOMATIC_MESSAGE_DELETION = 0 * MILLISECONDS_IN_DAY; // interval in ms, 0 to disable
+
 	public static final ChatState DEFAULT_CHATSTATE = ChatState.ACTIVE;
 	public static final int TYPING_TIMEOUT = 8;
 
