@@ -1,5 +1,6 @@
 package eu.siacs.conversations.services;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +10,7 @@ import android.util.Log;
 
 import eu.siacs.conversations.Config;
 import eu.siacs.conversations.utils.Compatibility;
+import eu.siacs.conversations.services.XmppConnectionService;
 
 public class EventReceiver extends BroadcastReceiver {
 
@@ -24,8 +26,13 @@ public class EventReceiver extends BroadcastReceiver {
             intentForService.setAction("other");
         }
         final String action = originalIntent.getAction();
-        if (action.equals("ui") || hasEnabledAccounts(context)) {
+        if (action.equals("ui") || hasEnabledAccounts(context)
+            || action.equals(XmppConnectionService.ACTION_CLEAR_APP_DATA)) {
             Compatibility.startService(context, intentForService);
+            if (Config.PROCESS_CLEAR_APP_DATA_ACTION
+                && action.equals(XmppConnectionService.ACTION_CLEAR_APP_DATA)) {
+                setResultCode(Activity.RESULT_OK);
+            }
         } else {
             Log.d(Config.LOGTAG, "EventReceiver ignored action " + intentForService.getAction());
         }
