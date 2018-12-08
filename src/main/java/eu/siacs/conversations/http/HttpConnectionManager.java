@@ -1,5 +1,6 @@
 package eu.siacs.conversations.http;
 
+import android.os.Looper;
 import android.util.Log;
 
 import org.apache.http.conn.ssl.StrictHostnameVerifier;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.regex.Pattern;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -30,6 +32,25 @@ import eu.siacs.conversations.utils.TLSSocketFactory;
 
 public class HttpConnectionManager extends AbstractConnectionManager {
 
+    private static Proxy corporateProxy = null;
+
+    private static Pattern[] nonProxyHostsPatterns;
+
+    private void initNonProxyHostsPatterns() {
+            List<Pattern> patterns = new ArrayList<Pattern>();
+            if (Config.HTTP_NO_PROXY != null) {
+                    for (String nonProxyHost : Config.HTTP_NO_PROXY) {
+                            if (nonProxyHost == null || nonProxyHost.length() <= 0) {
+                                    continue;
+                            }
+                            String pattern = nonProxyHost;
+                            pattern = pattern.replace(".", "\\.").replace("*", ".*");
+                            patterns.add(Pattern.compile(pattern, Pattern.CASE_INSENSITIVE));
+                    }
+            }
+            nonProxyHostsPatterns = patterns.toArray(new Pattern[patterns.size()]);
+    }
+
     private final List<HttpDownloadConnection> downloadConnections = new ArrayList<>();
     private final List<HttpUploadConnection> uploadConnections = new ArrayList<>();
 
@@ -37,10 +58,41 @@ public class HttpConnectionManager extends AbstractConnectionManager {
 
     public HttpConnectionManager(XmppConnectionService service) {
         super(service);
+        initNonProxyHostsPatterns();
     }
 
     public static Proxy getProxy() throws IOException {
         return new Proxy(Proxy.Type.SOCKS, new InetSocketAddress(InetAddress.getByAddress(new byte[]{127, 0, 0, 1}), 9050));
+    }
+
+    public static Proxy getCorporateProxy(URL url) throws IOException {
+        if (Config.HTTP_PROXY == null) {
+                return Proxy.NO_PROXY;
+        }
+        if (url != null) {
+            String host = url.getHost();
+            if (host != null) {
+                    for (Pattern pattern : nonProxyHostsPatterns) {
+                            if (pattern.matcher(host).matches()) {
+                                    return Proxy.NO_PROXY;
+                            }
+                    }
+            }
+        }
+        if (corporateProxy != null) {
+            return corporateProxy;
+        }
+        if(Looper.getMainLooper().isCurrentThread()) {
+            new Thread(new Runnable() {
+                @Override public void run() {
+                    corporateProxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(Config.HTTP_PROXY, Config.HTTP_PROXY_PORT));
+                }
+            }).start();
+            return Proxy.NO_PROXY;
+        } else {
+            corporateProxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(Config.HTTP_PROXY, Config.HTTP_PROXY_PORT));
+            return corporateProxy;
+        }
     }
 
     public void createNewDownloadConnection(Message message) {

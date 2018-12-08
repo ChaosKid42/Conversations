@@ -168,7 +168,7 @@ public class HttpUploadConnection implements Transferable {
 			if (mUseTor || message.getConversation().getAccount().isOnion() || onionSlot) {
 				connection = (HttpURLConnection) slot.getPutUrl().openConnection(HttpConnectionManager.getProxy());
 			} else {
-				connection = (HttpURLConnection) slot.getPutUrl().openConnection();
+				connection = (HttpURLConnection) slot.getPutUrl().openConnection(HttpConnectionManager.getCorporateProxy(slot.getPutUrl()));
 			}
 			if (connection instanceof HttpsURLConnection) {
 				mHttpConnectionManager.setupTrustManager((HttpsURLConnection) connection, true);
@@ -176,7 +176,7 @@ public class HttpUploadConnection implements Transferable {
 			connection.setUseCaches(false);
 			connection.setRequestMethod("PUT");
 			connection.setFixedLengthStreamingMode(expectedFileSize);
-			connection.setRequestProperty("User-Agent",mXmppConnectionService.getIqGenerator().getUserAgent());
+			System.setProperty("http.agent", "Conversations");
 			if(slot.getHeaders() != null) {
 				for(HashMap.Entry<String,String> entry : slot.getHeaders().entrySet()) {
 					connection.setRequestProperty(entry.getKey(),entry.getValue());
