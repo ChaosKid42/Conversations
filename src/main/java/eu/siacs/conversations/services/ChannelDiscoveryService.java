@@ -8,6 +8,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -44,6 +45,14 @@ public class ChannelDiscoveryService {
                 builder.proxy(HttpConnectionManager.getProxy());
             } catch (IOException e) {
                 throw new RuntimeException("Unable to use Tor proxy", e);
+            }
+        } else {
+            try {
+                if (Config.CHANNEL_DISCOVERY != null) {
+                    builder.proxy(HttpConnectionManager.getCorporateProxy(new URL(Config.CHANNEL_DISCOVERY)));
+                }
+            } catch (IOException e) {
+                throw new RuntimeException("Unable to use http proxy", e);
             }
         }
         Retrofit retrofit = new Retrofit.Builder()
