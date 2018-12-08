@@ -279,7 +279,7 @@ public class HttpDownloadConnection implements Transferable {
 				if (mUseTor || message.getConversation().getAccount().isOnion()) {
 					connection = (HttpURLConnection) mUrl.openConnection(HttpConnectionManager.getProxy());
 				} else {
-					connection = (HttpURLConnection) mUrl.openConnection();
+					connection = (HttpURLConnection) mUrl.openConnection(HttpConnectionManager.getCorporateProxy(mUrl));
 				}
 				if (method == Method.P1_S3) {
 					connection.setRequestMethod("GET");
@@ -362,7 +362,7 @@ public class HttpDownloadConnection implements Transferable {
 				if (mUseTor || message.getConversation().getAccount().isOnion()) {
 					connection = (HttpURLConnection) mUrl.openConnection(HttpConnectionManager.getProxy());
 				} else {
-					connection = (HttpURLConnection) mUrl.openConnection();
+					connection = (HttpURLConnection) mUrl.openConnection(HttpConnectionManager.getCorporateProxy(mUrl));
 				}
 				if (connection instanceof HttpsURLConnection) {
 					mHttpConnectionManager.setupTrustManager((HttpsURLConnection) connection, interactive);
