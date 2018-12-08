@@ -281,7 +281,7 @@ public class HttpDownloadConnection implements Transferable {
 				if (mUseTor || message.getConversation().getAccount().isOnion() || onion) {
 					connection = (HttpURLConnection) mUrl.openConnection(HttpConnectionManager.getProxy());
 				} else {
-					connection = (HttpURLConnection) mUrl.openConnection();
+					connection = (HttpURLConnection) mUrl.openConnection(HttpConnectionManager.getCorporateProxy(mUrl));
 				}
 				if (method == Method.P1_S3) {
 					connection.setRequestMethod("GET");
@@ -291,7 +291,7 @@ public class HttpDownloadConnection implements Transferable {
 				}
 				connection.setUseCaches(false);
 				Log.d(Config.LOGTAG, "url: " + connection.getURL().toString());
-				connection.setRequestProperty("User-Agent", mXmppConnectionService.getIqGenerator().getUserAgent());
+				System.setProperty("http.agent", "Conversations");
 				if (connection instanceof HttpsURLConnection) {
 					mHttpConnectionManager.setupTrustManager((HttpsURLConnection) connection, interactive);
 				}
@@ -364,13 +364,13 @@ public class HttpDownloadConnection implements Transferable {
 				if (mUseTor || message.getConversation().getAccount().isOnion()) {
 					connection = (HttpURLConnection) mUrl.openConnection(HttpConnectionManager.getProxy());
 				} else {
-					connection = (HttpURLConnection) mUrl.openConnection();
+					connection = (HttpURLConnection) mUrl.openConnection(HttpConnectionManager.getCorporateProxy(mUrl));
 				}
 				if (connection instanceof HttpsURLConnection) {
 					mHttpConnectionManager.setupTrustManager((HttpsURLConnection) connection, interactive);
 				}
 				connection.setUseCaches(false);
-				connection.setRequestProperty("User-Agent", mXmppConnectionService.getIqGenerator().getUserAgent());
+				System.setProperty("http.agent", "Conversations");
 				final long expected = file.getExpectedSize();
 				final boolean tryResume = file.exists() && file.getKey() == null && file.getSize() > 0 && file.getSize() < expected;
 				long resumeSize = 0;
