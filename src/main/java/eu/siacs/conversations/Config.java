@@ -57,6 +57,11 @@ public final class Config {
 
     public static final boolean ALLOW_NON_TLS_CONNECTIONS = false; //very dangerous. you should have a good reason to set this to true
 
+    public static final String HTTP_PROXY = null;
+    public static final int HTTP_PROXY_PORT = 3128;
+    public static final String HTTP_NO_PROXY[] = {};
+    public static final boolean USE_PROXY_FOR_MAPS = false;
+
     public static final long CONTACT_SYNC_RETRY_INTERVAL = 1000L * 60 * 5;
 
 
