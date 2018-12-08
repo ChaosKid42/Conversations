@@ -111,6 +111,8 @@ public abstract class LocationActivity extends ActionBarActivity implements Loca
 		config.setUserAgentValue(BuildConfig.APPLICATION_ID + "/" + BuildConfig.VERSION_CODE);
 		if (QuickConversationsService.isConversations() && getBooleanPreference("use_tor", R.bool.use_tor)) {
 			config.setHttpProxy(HttpConnectionManager.getProxy());
+		} else if (Config.USE_PROXY_FOR_MAPS) {
+			config.setHttpProxy(HttpConnectionManager.getCorporateProxy(null));
 		}
 	}
 
