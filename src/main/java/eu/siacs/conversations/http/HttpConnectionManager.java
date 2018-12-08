@@ -1,6 +1,7 @@
 package eu.siacs.conversations.http;
 
 import android.os.Build;
+import android.os.Looper;
 import android.util.Log;
 
 import org.apache.http.conn.ssl.StrictHostnameVerifier;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSocketFactory;
@@ -36,6 +38,25 @@ import okhttp3.ResponseBody;
 
 public class HttpConnectionManager extends AbstractConnectionManager {
 
+    private static Proxy corporateProxy = null;
+
+    private static Pattern[] nonProxyHostsPatterns;
+
+    private void initNonProxyHostsPatterns() {
+            List<Pattern> patterns = new ArrayList<Pattern>();
+            if (Config.HTTP_NO_PROXY != null) {
+                    for (String nonProxyHost : Config.HTTP_NO_PROXY) {
+                            if (nonProxyHost == null || nonProxyHost.length() <= 0) {
+                                    continue;
+                            }
+                            String pattern = nonProxyHost;
+                            pattern = pattern.replace(".", "\\.").replace("*", ".*");
+                            patterns.add(Pattern.compile(pattern, Pattern.CASE_INSENSITIVE));
+                    }
+            }
+            nonProxyHostsPatterns = patterns.toArray(new Pattern[patterns.size()]);
+    }
+
     private final List<HttpDownloadConnection> downloadConnections = new ArrayList<>();
     private final List<HttpUploadConnection> uploadConnections = new ArrayList<>();
 
@@ -45,6 +66,7 @@ public class HttpConnectionManager extends AbstractConnectionManager {
 
     public HttpConnectionManager(XmppConnectionService service) {
         super(service);
+        initNonProxyHostsPatterns();
     }
 
     public static Proxy getProxy() {
@@ -58,6 +80,36 @@ public class HttpConnectionManager extends AbstractConnectionManager {
             return new Proxy(Proxy.Type.SOCKS, new InetSocketAddress(localhost, 9050));
         } else {
             return new Proxy(Proxy.Type.HTTP, new InetSocketAddress(localhost, 8118));
+        }
+    }
+
+    public static Proxy getCorporateProxy(HttpUrl url) {
+        if (Config.HTTP_PROXY == null) {
+                return Proxy.NO_PROXY;
+        }
+        if (url != null) {
+            String host = url.host();
+            if (host != null) {
+                    for (Pattern pattern : nonProxyHostsPatterns) {
+                            if (pattern.matcher(host).matches()) {
+                                    return Proxy.NO_PROXY;
+                            }
+                    }
+            }
+        }
+        if (corporateProxy != null) {
+            return corporateProxy;
+        }
+        if(Looper.getMainLooper().isCurrentThread()) {
+            new Thread(new Runnable() {
+                @Override public void run() {
+                    corporateProxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(Config.HTTP_PROXY, Config.HTTP_PROXY_PORT));
+                }
+            }).start();
+            return Proxy.NO_PROXY;
+        } else {
+            corporateProxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(Config.HTTP_PROXY, Config.HTTP_PROXY_PORT));
+            return corporateProxy;
         }
     }
 
@@ -118,6 +170,8 @@ public class HttpConnectionManager extends AbstractConnectionManager {
         setupTrustManager(builder, interactive);
         if (mXmppConnectionService.useTorToConnect() || account.isOnion() || onionSlot) {
             builder.proxy(HttpConnectionManager.getProxy()).build();
+        } else {
+            builder.proxy(HttpConnectionManager.getCorporateProxy(url)).build();
         }
         return builder.build();
     }
@@ -146,6 +200,8 @@ public class HttpConnectionManager extends AbstractConnectionManager {
         final OkHttpClient.Builder builder = OK_HTTP_CLIENT.newBuilder();
         if (tor) {
             builder.proxy(HttpConnectionManager.getProxy()).build();
+        } else {
+            builder.proxy(HttpConnectionManager.getCorporateProxy(httpUrl)).build();
         }
         final OkHttpClient client = builder.build();
         final Request request = new Request.Builder().get().url(httpUrl).build();
