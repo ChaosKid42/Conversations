@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import eu.siacs.conversations.Config;
 import eu.siacs.conversations.R;
 import eu.siacs.conversations.persistance.DatabaseBackend;
 import eu.siacs.conversations.services.QuickConversationsService;
@@ -108,7 +109,7 @@ public class UriHandlerActivity extends AppCompatActivity {
         final XmppUri xmppUri = new XmppUri(uri);
         final List<Jid> accounts = DatabaseBackend.getInstance(this).getAccountJids(true);
 
-        if (SignupUtils.isSupportTokenRegistry() && xmppUri.isValidJid()) {
+        if (SignupUtils.isSupportTokenRegistry() && Config.MAGIC_CREATE_DOMAIN != null && xmppUri.isValidJid()) {
             final String preAuth = xmppUri.getParameter(XmppUri.PARAMETER_PRE_AUTH);
             final Jid jid = xmppUri.getJid();
             if (xmppUri.isAction(XmppUri.ACTION_REGISTER)) {
@@ -128,7 +129,7 @@ public class UriHandlerActivity extends AppCompatActivity {
             }
         }
 
-        if (accounts.size() == 0) {
+        if (accounts.size() == 0 && Config.MAGIC_CREATE_DOMAIN != null) {
             if (xmppUri.isValidJid()) {
                 intent = SignupUtils.getSignUpIntent(this);
                 intent.putExtra(StartConversationActivity.EXTRA_INVITE_URI, xmppUri.toString());
