@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import eu.siacs.conversations.Config;
 import eu.siacs.conversations.R;
 import eu.siacs.conversations.persistance.DatabaseBackend;
 import eu.siacs.conversations.utils.SignupUtils;
@@ -87,7 +88,7 @@ public class UriHandlerActivity extends AppCompatActivity {
         final XmppUri xmppUri = new XmppUri(uri);
         final List<Jid> accounts = DatabaseBackend.getInstance(this).getAccountJids(true);
 
-        if (accounts.size() == 0) {
+        if (accounts.size() == 0 && Config.MAGIC_CREATE_DOMAIN != null) {
             if (xmppUri.isJidValid()) {
                 intent = SignupUtils.getSignUpIntent(this);
                 startActivity(intent);
