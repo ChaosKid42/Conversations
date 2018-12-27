@@ -132,6 +132,8 @@ public final class Config {
     public static final boolean IGNORE_ID_REWRITE_IN_MUC = true;
     public static final boolean MUC_LEAVE_BEFORE_JOIN = true;
 
+    public static final boolean WARN_NON_ANONYMOUS = true; // whether to warn before joining non-anon non-private rooms
+
     public static final long MAM_MAX_CATCHUP = MILLISECONDS_IN_DAY * 5;
     public static final int MAM_MAX_MESSAGES = 750;
 
