@@ -2487,7 +2487,7 @@ public class XmppConnectionService extends Service {
 					Account account = conversation.getAccount();
 					final MucOptions mucOptions = conversation.getMucOptions();
 
-					if (mucOptions.nonanonymous() && !mucOptions.membersOnly() && !conversation.getBooleanAttribute("accept_non_anonymous", false)) {
+					if (Config.WARN_NON_ANONYMOUS && mucOptions.nonanonymous() && !mucOptions.membersOnly() && !conversation.getBooleanAttribute("accept_non_anonymous", false)) {
 					    mucOptions.setError(MucOptions.Error.NON_ANONYMOUS);
 					    updateConversationUi();
                         if (onConferenceJoined != null) {
