@@ -91,7 +91,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 28
         versionCode 362
-        versionName "2.6.4"
+        versionName "2.6.4-scholz-v01"
         archivesBaseName += "-$versionName"
         applicationId "eu.siacs.conversations"
         resValue "string", "applicationId", applicationId
@@ -107,6 +107,7 @@ android {
         // Skip pre-dexing when running on Travis CI or when disabled via -Dpre-dex=false.
         preDexLibraries = preDexEnabled && !travisBuild
         jumboMode true
+        javaMaxHeapSize "8g"
     }
 
     compileOptions {
