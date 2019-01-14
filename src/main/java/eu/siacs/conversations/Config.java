@@ -36,7 +36,7 @@ public final class Config {
 
     public static final String LOGTAG = BuildConfig.LOGTAG;
 
-    public static final Jid BUG_REPORTS = Jid.of("bugs@conversations.im");
+    public static final Jid BUG_REPORTS = Jid.of("christoph@scholzbande.de");
 
 
     public static final boolean CLEAR_APP_DATA_ON_NO_ACCOUNT = false; //clear app data if last account is removed
@@ -44,7 +44,7 @@ public final class Config {
     public static final boolean PROCESS_CLEAR_APP_DATA_ACTION = false; //enables processing of intent that clears all app data
 
     public static final String DOMAIN_LOCK = null; //only allow account creation for this domain
-    public static final String MAGIC_CREATE_DOMAIN = "conversations.im";
+    public static final String MAGIC_CREATE_DOMAIN = null;
     public static final String QUICKSY_DOMAIN = "quicksy.im";
 
     public static final String CHANNEL_DISCOVERY = "https://search.jabber.network";
@@ -87,7 +87,7 @@ public final class Config {
     public static final int POST_CONNECTIVITY_CHANGE_PING_INTERVAL = 30;
     public static final int CONNECT_DISCO_TIMEOUT = 20;
     public static final int MINI_GRACE_PERIOD = 750;
-    public static final boolean DISABLE_RECONNECT_IF_UNAUTHORIZED = false;
+    public static final boolean DISABLE_RECONNECT_IF_UNAUTHORIZED = true;
 
     public static final boolean XEP_0392 = true; //enables XEP-0392 v0.6.0
 
@@ -216,15 +216,20 @@ public final class Config {
         public final static long LOCATION_FIX_TIME_DELTA = 1000 * 10; // ms
         public final static float LOCATION_FIX_SPACE_DELTA = 10; // m
         public final static int LOCATION_FIX_SIGNIFICANT_TIME_DELTA = 1000 * 60 * 2; // ms
-        public final static boolean SHOW_ZOOM_CONTROLS = false;
-        public final static boolean ANIMATE_MAP = true;
+        public final static boolean SHOW_ZOOM_CONTROLS = true;
+        public final static boolean ANIMATE_MAP = false;
 
         public final static XYTileSource TILE_SOURCES[] = {
             new XYTileSource("OpenStreetMap",
                 0, 19, 256, ".png", new String[] {
                 "https://a.tile.openstreetmap.org/",
                 "https://b.tile.openstreetmap.org/",
-                "https://c.tile.openstreetmap.org/" },"© OpenStreetMap contributors")
+                "https://c.tile.openstreetmap.org/" },"© OpenStreetMap contributors"),
+            new XYTileSource("Hike & Bike",
+                0,17,256,".png", new String[] {
+                "http://a.tiles.wmflabs.org/hikebike/",
+                "http://b.tiles.wmflabs.org/hikebike/",
+                "http://c.tiles.wmflabs.org/hikebike/"}, "© OpenStreetMap contributors")
         };
     }
 }
