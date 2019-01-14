@@ -79,7 +79,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 28
         versionCode 323
-        versionName "2.4.3"
+        versionName "2.4.3-scholz-v01"
         archivesBaseName += "-$versionName"
         applicationId "eu.siacs.conversations"
         resValue "string", "applicationId", applicationId
