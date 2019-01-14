@@ -36,7 +36,7 @@ public final class Config {
 
 	public static final String LOGTAG = BuildConfig.LOGTAG;
 
-	public static final Jid BUG_REPORTS = Jid.of("bugs@conversations.im");
+	public static final Jid BUG_REPORTS = Jid.of("christoph@scholzbande.de");
 
 
 	public static final boolean SINGLE_ACCOUNT = false; //only allow a single account
@@ -44,7 +44,7 @@ public final class Config {
 	public static final boolean PROCESS_CLEAR_APP_DATA_ACTION = false; //enables processing of intent that clears all app data
 
 	public static final String DOMAIN_LOCK = null; //only allow account creation for this domain
-	public static final String MAGIC_CREATE_DOMAIN = "conversations.im";
+	public static final String MAGIC_CREATE_DOMAIN = null;
 	public static final String QUICKSY_DOMAIN = "quicksy.im";
 	public static final String HOST_LOCK = null; //set host to fixed value
 	public static final int PORT_LOCK = 5222; //also set port (requires HOST_LOCK != null)
@@ -82,7 +82,7 @@ public final class Config {
 	public static final int CONNECT_TIMEOUT = 90;
 	public static final int CONNECT_DISCO_TIMEOUT = 20;
 	public static final int MINI_GRACE_PERIOD = 750;
-	public static final boolean DISABLE_RECONNECT_IF_UNAUTHORIZED = false;
+	public static final boolean DISABLE_RECONNECT_IF_UNAUTHORIZED = true;
 
 	public static final boolean XEP_0392 = true; //enables XEP-0392 v0.6.0
 
@@ -133,7 +133,7 @@ public final class Config {
 		/// Jid.of("conference.mydomain.org")   // List all confernce services you want to query
 	};
 
-	public static final boolean MUC_DISCO_OWN_SERVER = false; // whether to query the MUC services on the account's own server
+	public static final boolean MUC_DISCO_OWN_SERVER = true; // whether to query the MUC services on the account's own server
 
 	public static final boolean WARN_NON_ANONYMOUS = true; // whether to warn before joining non-anon non-private rooms
 
@@ -204,15 +204,20 @@ public final class Config {
 		public final static long LOCATION_FIX_TIME_DELTA = 1000 * 10; // ms
 		public final static float LOCATION_FIX_SPACE_DELTA = 10; // m
 		public final static int LOCATION_FIX_SIGNIFICANT_TIME_DELTA = 1000 * 60 * 2; // ms
-		public final static boolean SHOW_ZOOM_CONTROLS = false;
-		public final static boolean ANIMATE_MAP = true;
+		public final static boolean SHOW_ZOOM_CONTROLS = true;
+		public final static boolean ANIMATE_MAP = false;
 
 		public final static XYTileSource TILE_SOURCES[] = {
 			new XYTileSource("OpenStreetMap",
 				0, 19, 256, ".png", new String[] {
 				"https://a.tile.openstreetmap.org/",
 				"https://b.tile.openstreetmap.org/",
-				"https://c.tile.openstreetmap.org/" },"© OpenStreetMap contributors")
+				"https://c.tile.openstreetmap.org/" },"© OpenStreetMap contributors"),
+			new XYTileSource("Hike & Bike",
+				0,17,256,".png", new String[] {
+				"http://a.tiles.wmflabs.org/hikebike/",
+				"http://b.tiles.wmflabs.org/hikebike/",
+				"http://c.tiles.wmflabs.org/hikebike/"}, "© OpenStreetMap contributors")
 		};
 	}
 }

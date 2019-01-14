@@ -78,7 +78,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 28
         versionCode 314
-        versionName "2.3.11"
+        versionName "2.3.11-scholz-v02"
         archivesBaseName += "-$versionName"
         applicationId "eu.siacs.conversations"
         resValue "string", "applicationId", applicationId
