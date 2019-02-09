@@ -143,6 +143,8 @@ public final class Config {
 
     public static final boolean DONT_CHANGE_DEFAULT_MUC_CONFIG_ON_JOIN_OR_CREATE = false; // whether Conversations restrains from changing MUC config on join or create
 
+    public static final boolean REMOVE_CREATE_PUBLIC_CHANNEL = false; // whether ro remove the fab for creating public rooms
+
     public static final long MAM_MAX_CATCHUP = MILLISECONDS_IN_DAY * 5;
     public static final int MAM_MAX_MESSAGES = 750;
 
