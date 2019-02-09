@@ -518,6 +518,9 @@ public class IqGenerator extends AbstractGenerator {
 
     public static Bundle defaultGroupChatConfiguration() {
         Bundle options = new Bundle();
+        if (Config.DONT_CHANGE_DEFAULT_MUC_CONFIG_ON_JOIN_OR_CREATE) {
+            return options;
+        }
         options.putString("muc#roomconfig_persistentroom", "1");
         options.putString("muc#roomconfig_membersonly", "1");
         options.putString("muc#roomconfig_publicroom", "0");
@@ -532,6 +535,9 @@ public class IqGenerator extends AbstractGenerator {
 
     public static Bundle defaultChannelConfiguration() {
         Bundle options = new Bundle();
+        if (Config.DONT_CHANGE_DEFAULT_MUC_CONFIG_ON_JOIN_OR_CREATE) {
+            return options;
+        }
         options.putString("muc#roomconfig_persistentroom", "1");
         options.putString("muc#roomconfig_membersonly", "0");
         options.putString("muc#roomconfig_publicroom", "1");
