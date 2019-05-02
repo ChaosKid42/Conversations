@@ -5,6 +5,10 @@
         android:title="@string/discover_channels"
         android:icon="@drawable/ic_search_white_24dp"/>
     <item
+        android:id="@+id/list_group_chats"
+        android:title="@string/list_group_chats"
+        android:icon="@drawable/ic_search_white_24dp"/>
+    <item
         android:id="@+id/join_public_channel"
         android:title="@string/join_public_channel"
         android:icon="@drawable/ic_input_white_24dp"/>

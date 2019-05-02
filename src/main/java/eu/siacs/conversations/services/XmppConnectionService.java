@@ -74,7 +74,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
-
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 import eu.siacs.conversations.Config;
 import eu.siacs.conversations.R;
@@ -117,6 +118,7 @@ import eu.siacs.conversations.ui.UiCallback;
 import eu.siacs.conversations.ui.interfaces.OnAvatarPublication;
 import eu.siacs.conversations.ui.interfaces.OnMediaLoaded;
 import eu.siacs.conversations.ui.interfaces.OnSearchResultsAvailable;
+import eu.siacs.conversations.utils.AccountUtils;
 import eu.siacs.conversations.utils.Compatibility;
 import eu.siacs.conversations.utils.ConversationsFileObserver;
 import eu.siacs.conversations.utils.CryptoHelper;
@@ -868,8 +870,56 @@ public class XmppConnectionService extends Service {
         mChannelDiscoveryService.initializeMuclumbusService();
     }
 
+    public void discoverLocalRooms(ChannelDiscoveryService.OnChannelSearchResultsFound listener) {
+        final Account account = AccountUtils.getFirstEnabled(this);
+        if (account == null) {
+            return;
+        }
+        List<String> mucServers = account.getXmppConnection().getMucServers();
+        if (mucServers.isEmpty()) {
+            return;
+        }
+        IqPacket iqPacket = new IqPacket(IqPacket.TYPE.GET);
+        iqPacket.setTo(Jid.of(mucServers.get(0)));
+        iqPacket.query("http://jabber.org/protocol/disco#items");
+        sendIqPacket(account, iqPacket, new OnIqPacketReceived() {
+            @Override
+            public void onIqPacketReceived(Account account, IqPacket response) {
+                final Element query = response.query();
+                if (response.getType() == IqPacket.TYPE.RESULT && query != null) {
+                    ArrayList<MuclumbusService.Room> searchResults = new ArrayList<>();
+                    for (Element child : query.getChildren()) {
+                        if ("item".equals(child.getName())) {
+                            MuclumbusService.Room searchResult = new MuclumbusService.Room();
+                            searchResult.address = child.getAttribute("jid");
+                            searchResult.name = child.getAttribute("name");
+                            if (searchResult.name != null) {
+                                final Pattern roomNameP = Pattern.compile("^(.*)\\((.*)\\)$");
+                                Matcher m = roomNameP.matcher(searchResult.name);
+                                if (m.find()) {
+                                    searchResult.name = m.group(1).trim();
+                                    searchResult.description = m.group(2).trim();
+                                }
+                            }
+                            searchResults.add(searchResult);
+                        }
+                    }
+                    if (listener != null) {
+                        listener.onChannelSearchResultsFound(searchResults);
+                    }
+                } else {
+                    Log.d(Config.LOGTAG, mucServers.get(0) + ": could not discover rooms");
+                }
+            }
+        });
+    }
+
     public void discoverChannels(String query, ChannelDiscoveryService.OnChannelSearchResultsFound onChannelSearchResultsFound) {
-        mChannelDiscoveryService.discover(query, onChannelSearchResultsFound);
+        if (Config.CHANNEL_DISCOVERY != null) {
+            mChannelDiscoveryService.discover(query, onChannelSearchResultsFound);
+        } else {
+            discoverLocalRooms(onChannelSearchResultsFound);
+        }
     }
 
     public boolean isDataSaverDisabled() {

@@ -268,6 +268,12 @@ public class StartConversationActivity extends XmppActivity implements XmppConne
 			binding.speedDial.removeActionItemById(R.id.create_public_channel);
 		}
 
+		if (Config.CHANNEL_DISCOVERY == null) {
+			binding.speedDial.removeActionItemById(R.id.discover_public_channels);
+		} else {
+			binding.speedDial.removeActionItemById(R.id.list_group_chats);
+		}
+
 		binding.tabLayout.setupWithViewPager(binding.startConversationViewPager);
 		binding.startConversationViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 			@Override
@@ -319,6 +325,7 @@ public class StartConversationActivity extends XmppActivity implements XmppConne
 			}
 			switch (actionItem.getId()) {
 				case R.id.discover_public_channels:
+				case R.id.list_group_chats:
 					startActivity(new Intent(this, ChannelDiscoveryActivity.class));
 					break;
 				case R.id.join_public_channel:
