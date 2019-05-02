@@ -267,6 +267,9 @@ public class StartConversationActivity extends XmppActivity implements XmppConne
 		if (Config.REMOVE_CREATE_PUBLIC_CHANNEL) {
 			binding.speedDial.removeActionItemById(R.id.create_public_channel);
 		}
+		if (Config.CHANNEL_DISCOVERY == null) {
+			binding.speedDial.removeActionItemById(R.id.discover_public_channels);
+		}
 
 		binding.tabLayout.setupWithViewPager(binding.startConversationViewPager);
 		binding.startConversationViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
