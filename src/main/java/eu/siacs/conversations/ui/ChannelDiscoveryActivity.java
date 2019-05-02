@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+import eu.siacs.conversations.Config;
 import eu.siacs.conversations.R;
 import eu.siacs.conversations.databinding.ActivityChannelDiscoveryBinding;
 import eu.siacs.conversations.entities.Account;
@@ -72,19 +73,24 @@ public class ChannelDiscoveryActivity extends XmppActivity implements MenuItem.O
         configureActionBar(getSupportActionBar(), true);
         binding.list.setAdapter(this.adapter);
         this.adapter.setOnChannelSearchResultSelectedListener(this);
-        optedIn = getPreferences().getBoolean(CHANNEL_DISCOVERY_OPT_IN, false);
+        optedIn = Config.CHANNEL_DISCOVERY == null || getPreferences().getBoolean(CHANNEL_DISCOVERY_OPT_IN, false);
 
         final String search = savedInstanceState == null ? null : savedInstanceState.getString("search");
         if (search != null) {
             mInitialSearchValue.push(search);
         }
-
+        if (Config.CHANNEL_DISCOVERY == null) {
+            setTitle(R.string.list_group_chats);
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
         getMenuInflater().inflate(R.menu.muc_users_activity, menu);
         mMenuSearchView = menu.findItem(R.id.action_search);
+        if (Config.CHANNEL_DISCOVERY == null) {
+            mMenuSearchView.setVisible(false);
+        }
         final View mSearchView = mMenuSearchView.getActionView();
         mSearchEditText = mSearchView.findViewById(R.id.search_field);
         mSearchEditText.setHint(R.string.search_channels);
