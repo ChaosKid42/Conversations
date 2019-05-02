@@ -860,6 +860,7 @@
     <string name="search_participants">Search participants</string>
     <string name="file_too_large">File too large</string>
     <string name="attach">Attach</string>
+    <string name="list_group_chats">List group chats</string>
     <string name="discover_channels">Discover channels</string>
     <string name="search_channels">Search channels</string>
     <string name="channel_discovery_opt_in_title">Possible privacy violation!</string>

@@ -857,6 +857,7 @@
   <string name="search_participants">Teilnehmer suchen</string>
   <string name="file_too_large">Datei ist zu groß</string>
   <string name="attach">Hinzufügen</string>
+  <string name="list_group_chats">Gruppenchats anzeigen</string>
   <string name="discover_channels">Channels entdecken</string>
   <string name="search_channels">Channels suchen</string>
   <string name="channel_discovery_opt_in_title">Mögliche Datenschutzverletzung!</string>
