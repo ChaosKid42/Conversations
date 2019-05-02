@@ -46,13 +46,15 @@ public class ChannelDiscoveryService {
                 throw new RuntimeException("Unable to use Tor proxy", e);
             }
         }
-        Retrofit retrofit = new Retrofit.Builder()
-                .client(builder.build())
-                .baseUrl(Config.CHANNEL_DISCOVERY)
-                .addConverterFactory(GsonConverterFactory.create())
-                .callbackExecutor(Executors.newSingleThreadExecutor())
-                .build();
-        this.muclumbusService = retrofit.create(MuclumbusService.class);
+        if (Config.CHANNEL_DISCOVERY != null) {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .client(builder.build())
+                    .baseUrl(Config.CHANNEL_DISCOVERY)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .callbackExecutor(Executors.newSingleThreadExecutor())
+                    .build();
+            this.muclumbusService = retrofit.create(MuclumbusService.class);
+        }
     }
 
     public void discover(String query, OnChannelSearchResultsFound onChannelSearchResultsFound) {
