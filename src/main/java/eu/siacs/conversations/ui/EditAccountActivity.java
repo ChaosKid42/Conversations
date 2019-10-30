@@ -425,7 +425,7 @@ public class EditAccountActivity extends OmemoActivity implements OnAccountUpdat
         }
 
 
-        if (xmppConnectionService.getAccounts().size() == 0 && Config.MAGIC_CREATE_DOMAIN != null) {
+        if (xmppConnectionService != null && xmppConnectionService.getAccounts().size() == 0 && Config.MAGIC_CREATE_DOMAIN != null) {
             Intent intent = SignupUtils.getSignUpIntent(this, mForceRegister != null && mForceRegister);
             StartConversationActivity.addInviteUri(intent, getIntent());
             startActivity(intent);
