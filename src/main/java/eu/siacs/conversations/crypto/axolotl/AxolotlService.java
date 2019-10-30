@@ -437,6 +437,9 @@ public class AxolotlService implements OnAdvancedStreamFeaturesLoaded {
     }
 
     private void publishDeviceIdsAndRefineAccessModel(final Set<Integer> ids, final boolean firstAttempt) {
+        if (ids == null) {
+            return;
+        }
         final Bundle publishOptions = account.getXmppConnection().getFeatures().pepPublishOptions() ? PublishOptions.openAccess() : null;
         IqPacket publish = mXmppConnectionService.getIqGenerator().publishDeviceIds(ids, publishOptions);
         mXmppConnectionService.sendIqPacket(account, publish, new OnIqPacketReceived() {
