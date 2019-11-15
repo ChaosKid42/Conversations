@@ -46,6 +46,7 @@ public final class Config {
 
     public static final boolean CLEAR_APP_DATA_ON_NO_ACCOUNT = false; //clear app data if last account is removed
     public static final boolean SINGLE_ACCOUNT = false; //only allow a single account
+    public static final boolean PROCESS_CLEAR_APP_DATA_ACTION = false; //enables processing of intent that clears all app data
 
     public static final String DOMAIN_LOCK = null; //only allow account creation for this domain
     public static final String MAGIC_CREATE_DOMAIN = "conversations.im";
