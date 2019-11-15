@@ -1,5 +1,6 @@
 package eu.siacs.conversations.ui;
 
+import android.app.ActivityManager;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
@@ -376,6 +377,9 @@ public class ManageAccountActivity extends XmppActivity implements OnAccountUpda
                 (dialog, which) -> {
                     xmppConnectionService.deleteAccount(account);
                     selectedAccount = null;
+                    if (Config.CLEAR_APP_DATA_ON_NO_ACCOUNT && xmppConnectionService.getAccounts().size() == 0) {
+                        getSystemService(ActivityManager.class).clearApplicationUserData();
+                    }
                     if (xmppConnectionService.getAccounts().size() == 0 && Config.MAGIC_CREATE_DOMAIN != null) {
                         WelcomeActivity.launch(this);
                     }
