@@ -40,6 +40,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -75,6 +76,7 @@ import eu.siacs.conversations.ui.util.ActivityResult;
 import eu.siacs.conversations.ui.util.ConversationMenuConfigurator;
 import eu.siacs.conversations.ui.util.MenuDoubleTabUtil;
 import eu.siacs.conversations.ui.util.PendingItem;
+import eu.siacs.conversations.ui.util.StyledAttributes;
 import eu.siacs.conversations.utils.AccountUtils;
 import eu.siacs.conversations.utils.EmojiWrapper;
 import eu.siacs.conversations.utils.ExceptionHelper;
@@ -158,6 +160,7 @@ public class ConversationsActivity extends XmppActivity implements OnConversatio
             handleActivityResult(activityResult);
         }
 
+        updateToolbarBGColor();
         invalidateActionBarTitle();
         if (binding.secondaryFragment != null && ConversationFragment.getConversation(this) == null) {
             Conversation conversation = ConversationsOverviewFragment.getSuggestion(this);
@@ -413,6 +416,20 @@ public class ConversationsActivity extends XmppActivity implements OnConversatio
         runOnUiThread(() -> Toast.makeText(ConversationsActivity.this, msg, Toast.LENGTH_SHORT).show());
     }
 
+    private void updateToolbarBGColor() {
+        if (Config.SINGLE_ACCOUNT && xmppConnectionService != null) {
+            List<Account> accounts = xmppConnectionService.getAccounts();
+            if (accounts.size() == 1) {
+                Account account = accounts.get(0);
+                if (account.getStatus() == Account.State.ONLINE) {
+                    binding.toolbar.setBackgroundColor(StyledAttributes.getColor(this, R.attr.colorPrimary));
+                } else {
+                    binding.toolbar.setBackgroundColor(Color.RED);
+                }
+            }
+        }
+    }
+
     @Override
     public void onAffiliationChangedSuccessful(Jid jid) {
 
@@ -533,6 +550,7 @@ public class ConversationsActivity extends XmppActivity implements OnConversatio
     @Override
     public void onResume() {
         super.onResume();
+        updateToolbarBGColor();
         this.mActivityPaused = false;
     }
 
@@ -642,6 +660,7 @@ public class ConversationsActivity extends XmppActivity implements OnConversatio
 
     @Override
     public void onAccountUpdate() {
+        updateToolbarBGColor();
         this.refreshUi();
     }
 
