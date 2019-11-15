@@ -160,6 +160,10 @@ public class ManageAccountActivity extends XmppActivity implements OnAccountUpda
         MenuItem addAccount = menu.findItem(R.id.action_add_account);
         MenuItem addAccountWithCertificate = menu.findItem(R.id.action_add_account_with_cert);
 
+        if (Config.SINGLE_ACCOUNT && this.accountList.size() > 0) {
+            addAccount.setVisible(false);
+        }
+
         if (Config.X509_VERIFICATION) {
             addAccount.setVisible(false);
             addAccountWithCertificate.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
