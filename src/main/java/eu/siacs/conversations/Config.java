@@ -44,6 +44,8 @@ public final class Config {
     public static final Uri HELP = Uri.parse("https://help.conversations.im");
 
 
+    public static final boolean CLEAR_APP_DATA_ON_NO_ACCOUNT = false; //clear app data if last account is removed
+
     public static final String DOMAIN_LOCK = null; //only allow account creation for this domain
     public static final String MAGIC_CREATE_DOMAIN = "conversations.im";
     public static final Jid QUICKSY_DOMAIN = Jid.of("quicksy.im");
