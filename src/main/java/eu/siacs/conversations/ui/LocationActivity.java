@@ -31,6 +31,7 @@ import org.osmdroid.tileprovider.tilesource.XYTileSource;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.CustomZoomButtonsController;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.CopyrightOverlay;
 import org.osmdroid.views.overlay.Overlay;
 
 import java.io.IOException;
@@ -84,7 +85,7 @@ public abstract class LocationActivity extends ActionBarActivity implements Loca
 	protected void updateLocationMarkers() {
 		clearMarkers();
 	}
-	
+
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -143,6 +144,7 @@ public abstract class LocationActivity extends ActionBarActivity implements Loca
 
 	protected void setupMapView(MapView mapView, final GeoPoint pos) {
 		map = mapView;
+		map.getOverlays().add(new CopyrightOverlay(this));
 		map.setTileSource(tileSource);
 		if (Config.Map.SHOW_ZOOM_CONTROLS) {
 			map.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.SHOW_AND_FADEOUT);

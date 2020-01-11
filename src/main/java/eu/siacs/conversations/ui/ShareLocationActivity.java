@@ -11,10 +11,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
-import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.View;
-import android.widget.TextView;
 
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.GeoPoint;
@@ -108,8 +106,6 @@ public class ShareLocationActivity extends LocationActivity implements LocationL
 			}
 			toggleFixedLocation();
 		});
-
-		binding.openstreetmapCredit.setMovementMethod(LinkMovementMethod.getInstance());
 	}
 
 	@Override
