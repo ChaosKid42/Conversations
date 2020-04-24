@@ -240,4 +240,8 @@ public final class Config {
                 "https://c.tile.openstreetmap.org/" },"© OpenStreetMap contributors")
         };
     }
+
+    public static final String[] STATIC_ICE_SERVERS = null;
+    public final static String sharedTurnSecret = null;
+    public final static int turnTTL = 10*60; // 10 minutes
 }
