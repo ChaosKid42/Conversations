@@ -1,6 +1,7 @@
 package eu.siacs.conversations.xmpp.jingle;
 
 import android.os.SystemClock;
+import android.util.Base64;
 import android.util.Log;
 
 import com.google.common.base.Optional;
@@ -17,6 +18,7 @@ import org.webrtc.IceCandidate;
 import org.webrtc.PeerConnection;
 import org.webrtc.VideoTrack;
 
+import java.time.Instant;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Collection;
@@ -1035,7 +1037,36 @@ public class JingleRtpConnection extends AbstractJingleConnection implements Web
         }
     }
 
+    private String hash_hmac(String type, String value, String key) {
+        try {
+            javax.crypto.Mac mac = javax.crypto.Mac.getInstance(type);
+            javax.crypto.spec.SecretKeySpec secret = new javax.crypto.spec.SecretKeySpec(key.getBytes(), type);
+            mac.init(secret);
+            byte[] digest = mac.doFinal(value.getBytes());
+            return Base64.encodeToString(digest, Base64.NO_WRAP);
+        } catch (Exception e) {
+            Log.d(Config.LOGTAG, "Exception ["+e.getMessage()+"]", e);
+        }
+        return "";
+    }
+
     private void discoverIceServers(final OnIceServersDiscovered onIceServersDiscovered) {
+        if (Config.STATIC_ICE_SERVERS != null) {
+            ImmutableList.Builder<PeerConnection.IceServer> listBuilder = new ImmutableList.Builder<>();
+            for (String iceServerString : Config.STATIC_ICE_SERVERS) {
+                final PeerConnection.IceServer.Builder iceServerBuilder = PeerConnection.IceServer.builder(iceServerString);
+                if (iceServerString.startsWith("turn") && Config.sharedTurnSecret != null) {
+                    final String username = Long.toString(Instant.now().getEpochSecond()+Config.turnTTL);
+                    final String password = hash_hmac("HmacSHA1", username, Config.sharedTurnSecret);
+                    iceServerBuilder.setUsername(username);
+                    iceServerBuilder.setPassword(password);
+                }
+                final PeerConnection.IceServer iceServer = iceServerBuilder.createIceServer();
+                Log.d(Config.LOGTAG, id.account.getJid().asBareJid() + ": configured ICE Server: " + iceServer);
+                listBuilder.add(iceServer);
+            }
+            onIceServersDiscovered.onIceServersDiscovered(listBuilder.build());
+        } else
         if (id.account.getXmppConnection().getFeatures().externalServiceDiscovery()) {
             final IqPacket request = new IqPacket(IqPacket.TYPE.GET);
             request.setTo(Jid.of(id.account.getJid().getDomain()));
