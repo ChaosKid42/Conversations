@@ -967,8 +967,8 @@ public class ConversationFragment extends XmppFragment implements EditMessage.Ke
                 menuCall.setVisible(false);
             } else {
                 final RtpCapability.Capability rtpCapability = RtpCapability.check(conversation.getContact());
-                menuCall.setVisible(rtpCapability != RtpCapability.Capability.NONE);
-                menuVideoCall.setVisible(rtpCapability == RtpCapability.Capability.VIDEO);
+                menuCall.setVisible(!Config.DISABLE_AUDIO_CALL && rtpCapability != RtpCapability.Capability.NONE);
+                menuVideoCall.setVisible(!Config.DISABLE_VIDEO_CALL && rtpCapability == RtpCapability.Capability.VIDEO);
                 menuContactDetails.setVisible(!this.conversation.withSelf());
                 menuMucDetails.setVisible(false);
                 final XmppConnectionService service = activity.xmppConnectionService;
