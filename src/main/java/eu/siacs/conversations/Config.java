@@ -241,6 +241,9 @@ public final class Config {
         };
     }
 
+    public static final boolean DISABLE_AUDIO_CALL = false; // disable outgoing and incoming audio calls
+    public static final boolean DISABLE_VIDEO_CALL = false; // disable outgoing and incoming video calls
+
     public static final String[] STATIC_ICE_SERVERS = null;
     public final static String sharedTurnSecret = null;
     public final static int turnTTL = 10*60; // 10 minutes
