@@ -32,8 +32,11 @@ import eu.siacs.conversations.services.AbstractConnectionManager;
 import eu.siacs.conversations.services.XmppConnectionService;
 import eu.siacs.conversations.utils.TLSSocketFactory;
 import okhttp3.HttpUrl;
+import okhttp3.Interceptor;
+import okhttp3.Interceptor.Chain;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 public class HttpConnectionManager extends AbstractConnectionManager {
@@ -165,6 +168,14 @@ public class HttpConnectionManager extends AbstractConnectionManager {
         final String slotHostname = url.host();
         final boolean onionSlot = slotHostname.endsWith(".onion");
         final OkHttpClient.Builder builder = OK_HTTP_CLIENT.newBuilder();
+        builder.addInterceptor(new Interceptor() {
+            @Override
+            public Response intercept(Chain chain) throws IOException {
+                return chain.proceed(chain.request().newBuilder()
+                    .header("User-Agent", "Conversations")
+                    .build());
+            }
+        });
         builder.writeTimeout(30, TimeUnit.SECONDS);
         builder.readTimeout(readTimeout, TimeUnit.SECONDS);
         setupTrustManager(builder, interactive);
@@ -203,6 +214,14 @@ public class HttpConnectionManager extends AbstractConnectionManager {
         } else {
             builder.proxy(HttpConnectionManager.getCorporateProxy(httpUrl)).build();
         }
+        builder.addInterceptor(new Interceptor() {
+            @Override
+            public Response intercept(Chain chain) throws IOException {
+                return chain.proceed(chain.request().newBuilder()
+                    .header("User-Agent", "Conversations")
+                    .build());
+            }
+        });
         final OkHttpClient client = builder.build();
         final Request request = new Request.Builder().get().url(httpUrl).build();
         final ResponseBody body = client.newCall(request).execute().body();
