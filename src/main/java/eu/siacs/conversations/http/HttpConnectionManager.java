@@ -78,7 +78,7 @@ public class HttpConnectionManager extends AbstractConnectionManager {
 
 
     public static String getUserAgent() {
-        return String.format("%s/%s", BuildConfig.APP_NAME, BuildConfig.VERSION_NAME);
+        return BuildConfig.APP_NAME;
     }
 
     public HttpConnectionManager(XmppConnectionService service) {
